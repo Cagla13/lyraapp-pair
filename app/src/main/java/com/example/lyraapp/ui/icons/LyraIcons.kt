@@ -1,5 +1,8 @@
 package com.example.lyraapp.ui.icons
 
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LibraryMusic
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -15,6 +18,10 @@ import androidx.compose.ui.unit.dp
  * [Color.Black] ile doldukur ve renk daima çağrı tarafında temadan okunur.
  */
 object LyraIcons {
+
+    val Home = androidx.compose.material.icons.Icons.Default.Home
+    val Search = androidx.compose.material.icons.Icons.Default.Search
+    val LibraryMusic = androidx.compose.material.icons.Icons.Default.LibraryMusic
 
     /** Oynat butonu ikonu (Material PlayArrow). */
     val PlayArrow: ImageVector by lazy {
