@@ -2,6 +2,8 @@ package com.example.lyraapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lyraapp.ui.favorites.FavoritesStorage
+import com.example.lyraapp.ui.favorites.SongUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -26,20 +28,77 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             is HomeIntent.QuickPickClicked -> {
                 _uiState.update { current ->
                     val selected = current.quickPicks.find { it.id == intent.itemId }
-                    current.copy(currentPlayingTrack = selected, isPlaying = true)
+                    val isFav = selected?.let { item ->
+                        FavoritesStorage.savedSongsList.any { it.id == item.id }
+                    } ?: false
+                    current.copy(currentPlayingTrack = selected, isPlaying = true, isFavorite = isFav)
                 }
             }
             is HomeIntent.TrackClicked -> {
                 _uiState.update { current ->
                     val selected = current.recentlyPlayed.find { it.id == intent.itemId }
                         ?: current.customPlaylists.find { it.id == intent.itemId }
-                    current.copy(currentPlayingTrack = selected, isPlaying = true)
+                    val isFav = selected?.let { item ->
+                        FavoritesStorage.savedSongsList.any { it.id == item.id }
+                    } ?: false
+                    current.copy(currentPlayingTrack = selected, isPlaying = true, isFavorite = isFav)
                 }
             }
             HomeIntent.TogglePlayPause -> _uiState.update { it.copy(isPlaying = !it.isPlaying) }
-            HomeIntent.ToggleFavorite -> _uiState.update { it.copy(isFavorite = !it.isFavorite) }
-            HomeIntent.ProfileClicked -> viewModelScope.launch { _effect.send(HomeEffect.NavigateToProfile) }
-            HomeIntent.SeeAllRecentlyPlayedClicked -> { /* Efekt gönderilebilir */ }
+            HomeIntent.ToggleFavorite -> {
+                val currentTrack = _uiState.value.currentPlayingTrack
+                if (currentTrack != null) {
+                    val trackId = currentTrack.id
+                    val isCurrentlyFav = FavoritesStorage.savedSongsList.any { it.id == trackId }
+
+                    if (isCurrentlyFav) {
+                        FavoritesStorage.savedSongsList.removeAll { it.id == trackId }
+                    } else {
+                        // Tasarım aşaması için şarkıların ID'lerine göre saniye içeren gerçekçi süreler atıyoruz
+                        val trackDuration = when (trackId) {
+                            "1" -> "3:34"
+                            "2" -> "4:07"
+                            "3" -> "3:43"
+                            "4" -> "3:25"
+                            "5" -> "4:29"
+                            "6" -> "3:15"
+                            "7" -> "4:02"
+                            "8" -> "3:50"
+                            "9" -> "2:58"
+                            else -> "3:30"
+                        }
+
+                        val newFavorite = SongUiModel(
+                            id = currentTrack.id,
+                            title = currentTrack.title,
+                            artist = currentTrack.subtitle ?: "Bilinmeyen Sanatçı",
+                            duration = trackDuration,
+                            isPlaying = false
+                        )
+                        FavoritesStorage.savedSongsList.add(newFavorite)
+                    }
+                    _uiState.update { it.copy(isFavorite = !isCurrentlyFav) }
+                }
+            }
+            HomeIntent.ProfileClicked -> viewModelScope.launch {
+                _effect.send(HomeEffect.NavigateToProfile)
+            }
+            HomeIntent.SeeAllRecentlyPlayedClicked -> {
+                // İhtiyaca göre doldurulabilir
+            }
+            is HomeIntent.TrackClicked -> {
+                viewModelScope.launch {
+                    _effect.send(HomeEffect.NavigateToDetails(intent.itemId))
+                }
+            }
+        }
+    }
+
+    fun checkCurrentTrackFavoriteStatus() {
+        val currentTrack = _uiState.value.currentPlayingTrack
+        if (currentTrack != null) {
+            val isFav = FavoritesStorage.savedSongsList.any { it.id == currentTrack.id }
+            _uiState.update { it.copy(isFavorite = isFav) }
         }
     }
 
@@ -48,12 +107,12 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             HomeUiState(
                 userName = "Nazlı Yazıcı",
                 quickPicks = listOf(
-                    PlayableItem("1", "Gece Sürüşü", gradientIndex = 0),
-                    PlayableItem("2", "Sabah Kahvesi", gradientIndex = 1),
-                    PlayableItem("3", "Neon Sokaklar", gradientIndex = 2),
-                    PlayableItem("4", "Odaklan", gradientIndex = 0),
-                    PlayableItem("5", "Derin Mavi", gradientIndex = 1),
-                    PlayableItem("6", "Yaz Anıları", gradientIndex = 2)
+                    PlayableItem("1", "Gece Sürüşü", "Sakin Ritmler", gradientIndex = 0),
+                    PlayableItem("2", "Sabah Kahvesi", "Akustik", gradientIndex = 1),
+                    PlayableItem("3", "Neon Sokaklar", "Şehir Işıkları", gradientIndex = 2),
+                    PlayableItem("4", "Odaklan", "Lo-Fi", gradientIndex = 3),
+                    PlayableItem("5", "Derin Mavi", "Okyanus", gradientIndex = 4),
+                    PlayableItem("6", "Yaz Anıları", "Pop", gradientIndex = 5)
                 ),
                 recentlyPlayed = listOf(
                     PlayableItem("3", "Neon Sokaklar", "Şehir Işıkları"),
@@ -65,7 +124,9 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     PlayableItem("9", "Yeraltı Beats", "Lo-Fi Evreni")
                 ),
                 currentPlayingTrack = PlayableItem("3", "Neon Sokaklar", "Şehir Işıkları"),
-                isPlaying = false
+                isFavorite = false,
+                isPlaying = false,
+                isLoading = false
             )
         }
     }
