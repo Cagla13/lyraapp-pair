@@ -1,5 +1,6 @@
 package com.example.lyraapp.ui.navigation
 
+<<<<<<< HEAD
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -7,6 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+=======
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -21,10 +33,13 @@ import com.example.lyraapp.ui.search.SearchScreen
 import com.example.lyraapp.ui.search.SearchViewModel
 import com.example.lyraapp.ui.favorites.FavoritesScreen
 import com.example.lyraapp.ui.favorites.FavoritesViewModel
+<<<<<<< HEAD
 import com.example.lyraapp.ui.profile.ProfileScreen
 import com.example.lyraapp.ui.profile.ProfileViewModel
 import com.example.lyraapp.ui.library.LibraryScreen
 import com.example.lyraapp.ui.library.LibraryViewModel
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 
 @Composable
 fun LyraNavHost(
@@ -117,6 +132,7 @@ fun LyraNavHost(
                 SearchScreen(viewModel = searchViewModel)
             }
 
+<<<<<<< HEAD
             // GÜNCELLENEN VE GERÇEK KÜTÜPHANE TASARIMINA BAĞLANAN KÜTÜPHANE ROTASI
             composable(LyraDestination.Library.route) {
                 val libraryViewModel: LibraryViewModel = hiltViewModel()
@@ -124,6 +140,12 @@ fun LyraNavHost(
                     viewModel = libraryViewModel,
                     modifier = Modifier.fillMaxSize()
                 )
+=======
+            composable(LyraDestination.Library.route) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Kütüphane Ekranı İçeriği")
+                }
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             }
 
             // GÜNCELLENEN VE YENİ EKRANA BAĞLANAN FAVORİLER ROTASI
@@ -144,6 +166,7 @@ fun LyraNavHost(
                 )
             }
 
+<<<<<<< HEAD
 
             composable(LyraDestination.Profile.route) {
                 val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -151,6 +174,12 @@ fun LyraNavHost(
                     viewModel = profileViewModel,
                     modifier = Modifier.fillMaxSize()
                 )
+=======
+            composable(LyraDestination.Profile.route) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Profil Ekranı İçeriği")
+                }
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             }
         }
     }

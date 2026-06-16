@@ -1,7 +1,10 @@
 package com.example.lyraapp.ui.auth.login
 
 data class LoginUiState(
+<<<<<<< HEAD
     val email: String = "",
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val phoneNumber: String = "",
     val password: String = "",
     val isPasswordVisible: Boolean = false,
@@ -13,7 +16,10 @@ data class LoginUiState(
  * Kullanıcıdan gelen niyetler. UI yalnızca bu tipleri yayımlar; iş mantığını çalıştırmaz.
  */
 sealed interface LoginIntent {
+<<<<<<< HEAD
     data class EmailChanged(val value: String) : LoginIntent
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     data class PhoneNumberChanged(val value: String) : LoginIntent
     data class PasswordChanged(val value: String) : LoginIntent
     data object TogglePasswordVisibility : LoginIntent

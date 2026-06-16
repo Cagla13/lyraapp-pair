@@ -5,7 +5,10 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class HomeUiState(
     val userName: String = "",
+<<<<<<< HEAD
     val userAvatarText: String = "", // Profil yuvarlağında "NY" veya "MK" göstermek için eklendi
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val quickPicks: List<PlayableItem> = emptyList(),
     val recentlyPlayed: List<PlayableItem> = emptyList(),
     val customPlaylists: List<PlayableItem> = emptyList(),

@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+<<<<<<< HEAD
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -17,6 +18,8 @@ object ThemeManager {
         _isDarkTheme.value = isDark
     }
 }
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 
 private val LyraDarkColors = darkColorScheme(
     primary              = DarkPrimary,
@@ -35,13 +38,22 @@ private val LyraDarkColors = darkColorScheme(
     onError              = DarkOnError,
     errorContainer       = DarkErrorContainer,
     onErrorContainer     = DarkOnErrorContainer,
+<<<<<<< HEAD
     background           = DarkSurface,
     onBackground         = DarkOnSurface,
+=======
+    background           = DarkSurface,        // türetilen: surface ile aynı
+    onBackground         = DarkOnSurface,      // türetilen: onSurface ile aynı
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     surface              = DarkSurface,
     onSurface            = DarkOnSurface,
     surfaceVariant       = DarkSurfaceVariant,
     onSurfaceVariant     = DarkOnSurfaceVariant,
+<<<<<<< HEAD
     surfaceTint          = DarkPrimary,
+=======
+    surfaceTint          = DarkPrimary,        // M3 varsayılanı = primary
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     surfaceDim           = DarkSurfaceDim,
     surfaceBright        = DarkSurfaceBright,
     surfaceContainerLowest  = DarkSurfaceContainerLowest,

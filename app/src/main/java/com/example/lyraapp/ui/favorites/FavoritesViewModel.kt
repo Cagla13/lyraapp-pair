@@ -16,7 +16,11 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class FavoritesViewModel @Inject constructor() : ViewModel() {
 
+<<<<<<< HEAD
     private val _state = MutableStateFlow(FavoritesContract.State())
+=======
+    private val _state = MutableStateFlow<FavoritesContract.State>(FavoritesContract.State())
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val state: StateFlow<FavoritesContract.State> = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<FavoritesContract.SideEffect>()

@@ -3,7 +3,10 @@ package com.example.lyraapp.ui.auth.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lyraapp.data.AuthRepository
+<<<<<<< HEAD
 import com.example.lyraapp.ui.auth.UserStorage
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +29,11 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
+<<<<<<< HEAD
     private val _uiState = MutableStateFlow(LoginUiState())
+=======
+    private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState())
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     private val _effect = Channel<LoginEffect>(Channel.BUFFERED)
@@ -34,11 +41,15 @@ class LoginViewModel @Inject constructor(
 
     fun onIntent(intent: LoginIntent) {
         when (intent) {
+<<<<<<< HEAD
             is LoginIntent.EmailChanged -> updateForm { it.copy(email = intent.value) }
             is LoginIntent.PhoneNumberChanged -> {
                 val filteredPhone = intent.value.filter { it.isDigit() }.take(10)
                 updateForm { it.copy(phoneNumber = filteredPhone) }
             }
+=======
+            is LoginIntent.PhoneNumberChanged -> updateForm { it.copy(phoneNumber = intent.value) }
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             is LoginIntent.PasswordChanged -> updateForm { it.copy(password = intent.value) }
             is LoginIntent.TogglePasswordVisibility -> _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is LoginIntent.Submit -> submit()
@@ -58,6 +69,7 @@ class LoginViewModel @Inject constructor(
         val state = _uiState.value
         if (!state.isLoginEnabled || state.isLoading) return
 
+<<<<<<< HEAD
         // Sistemde kayıtlı bir kullanıcı var mı kontrolü
         val registeredUser = UserStorage.registeredUser
         if (registeredUser == null) {
@@ -79,6 +91,8 @@ class LoginViewModel @Inject constructor(
             return
         }
 
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val result = authRepository.login(state.phoneNumber, state.password)
@@ -93,6 +107,12 @@ class LoginViewModel @Inject constructor(
     }
 }
 
+<<<<<<< HEAD
 /** Giriş butonunun aktif olması için form validasyonu. */
 private fun LoginUiState.isFormValid(): Boolean =
     email.isNotBlank() && phoneNumber.length == 10 && password.isNotBlank()
+=======
+/** Giriş butonunun aktif olması için minimal validasyon. */
+private fun LoginUiState.isFormValid(): Boolean =
+    phoneNumber.isNotBlank() && password.isNotBlank()
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede

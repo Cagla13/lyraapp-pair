@@ -17,7 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+<<<<<<< HEAD
 import androidx.compose.foundation.shape.CircleShape
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,10 +39,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+<<<<<<< HEAD
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lyraapp.ui.icons.LyraIcons
 
+=======
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.lyraapp.ui.icons.LyraIcons
+
+
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 @Composable
 fun HomeRoute(
     onNavigateToDetails: (String) -> Unit,
@@ -94,11 +105,18 @@ fun HomeScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
+<<<<<<< HEAD
             // 1. Üst Başlık ve Profil Alanı (Dinamik State Bağlandı)
             item {
                 HomeHeader(
                     userName = state.userName,
                     avatarText = state.userAvatarText,
+=======
+            // 1. Üst Başlık ve Profil Alanı
+            item {
+                HomeHeader(
+                    userName = state.userName,
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                     onProfileClick = { onIntent(HomeIntent.ProfileClicked) }
                 )
             }
@@ -133,7 +151,11 @@ fun HomeScreen(
 }
 
 @Composable
+<<<<<<< HEAD
 private fun HomeHeader(userName: String, avatarText: String, onProfileClick: () -> Unit) {
+=======
+private fun HomeHeader(userName: String, onProfileClick: () -> Unit) {
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,17 +175,29 @@ private fun HomeHeader(userName: String, avatarText: String, onProfileClick: () 
                 fontWeight = FontWeight.Bold
             )
         }
+<<<<<<< HEAD
         // Profil İkonu (Giriş yapan kullanıcının baş harflerini dinamik basar)
         Box(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
+=======
+        // Profil İkonu (Mock Tasarımdaki Pembe ZK gibi yuvarlak alan)
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(20.dp))
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable(onClick = onProfileClick),
             contentAlignment = Alignment.Center
         ) {
             Text(
+<<<<<<< HEAD
                 text = avatarText,
+=======
+                text = userName.take(2).uppercase(),
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -251,6 +285,10 @@ private fun HorizontalTrackList(items: List<PlayableItem>, onItemClick: (String)
                     .width(140.dp)
                     .clickable { onItemClick(item.id) }
             ) {
+<<<<<<< HEAD
+=======
+                // Mock Tasarımdaki Renkli Albüm Kapağı Alanı
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 Box(
                     modifier = Modifier
                         .size(140.dp)

@@ -17,8 +17,11 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+<<<<<<< HEAD
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -30,8 +33,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+<<<<<<< HEAD
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,10 +49,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+<<<<<<< HEAD
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lyraapp.ui.icons.LyraIcons
 import com.example.lyraapp.ui.theme.LyraAppTheme
+=======
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.lyraapp.ui.icons.LyraIcons
+import com.example.lyraapp.ui.theme.LyraAppTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 
 /**
  * Login akışının durumlu (stateful) giriş noktası.
@@ -108,7 +124,11 @@ fun LoginScreen(
                 .imePadding()
                 .padding(horizontal = 24.dp),
         ) {
+<<<<<<< HEAD
             Spacer(Modifier.weight(0.15f))
+=======
+            Spacer(Modifier.weight(0.22f))
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 
             BrandLogo()
             Spacer(Modifier.height(24.dp))
@@ -116,12 +136,15 @@ fun LoginScreen(
             HeaderTexts()
             Spacer(Modifier.height(28.dp))
 
+<<<<<<< HEAD
             EmailField(
                 value = state.email,
                 onValueChange = { onIntent(LoginIntent.EmailChanged(it)) }
             )
             Spacer(Modifier.height(14.dp))
 
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             PhoneNumberField(
                 value = state.phoneNumber,
                 onValueChange = { onIntent(LoginIntent.PhoneNumberChanged(it)) },
@@ -197,6 +220,7 @@ private fun HeaderTexts() {
 }
 
 @Composable
+<<<<<<< HEAD
 private fun EmailField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -220,6 +244,8 @@ private fun EmailField(
 }
 
 @Composable
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 private fun PhoneNumberField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -231,7 +257,11 @@ private fun PhoneNumberField(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         label = { Text("Telefon numarası") },
+<<<<<<< HEAD
         prefix = { Text("+90 ") },
+=======
+        prefix = { Text("+90") },
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
         placeholder = { Text("5XX XXX XX XX") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         leadingIcon = {
@@ -351,7 +381,11 @@ private fun LoginScreenLightPreview() {
 private fun LoginScreenDarkPreview() {
     LyraAppTheme(darkTheme = true) {
         LoginScreen(
+<<<<<<< HEAD
             state = LoginUiState(email = "test@mail.com", phoneNumber = "5551234567", password = "secret", isLoginEnabled = true),
+=======
+            state = LoginUiState(phoneNumber = "555 123 45 67", password = "secret", isLoginEnabled = true),
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             onIntent = {},
         )
     }

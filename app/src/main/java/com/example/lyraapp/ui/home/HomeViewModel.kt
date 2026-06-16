@@ -2,7 +2,10 @@ package com.example.lyraapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+<<<<<<< HEAD
 import com.example.lyraapp.ui.auth.UserStorage
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import com.example.lyraapp.ui.favorites.FavoritesStorage
 import com.example.lyraapp.ui.favorites.SongUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
 
+<<<<<<< HEAD
     private val _uiState = MutableStateFlow(HomeUiState())
+=======
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState())
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private val _effect = Channel<HomeEffect>(Channel.BUFFERED)
@@ -36,12 +43,16 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 }
             }
             is HomeIntent.TrackClicked -> {
+<<<<<<< HEAD
                 // Navigasyon efekti tetikleniyor
                 viewModelScope.launch {
                     _effect.send(HomeEffect.NavigateToDetails(intent.itemId))
                 }
 
                 // Oynatılan şarkı durum güncellemesi
+=======
+                // UI State güncelleniyor
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 _uiState.update { current ->
                     val selected = current.recentlyPlayed.find { it.id == intent.itemId }
                         ?: current.customPlaylists.find { it.id == intent.itemId }
@@ -50,6 +61,14 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     } ?: false
                     current.copy(currentPlayingTrack = selected, isPlaying = true, isFavorite = isFav)
                 }
+<<<<<<< HEAD
+=======
+
+                // Aynı anda detay sayfasına yönlendirme efekti tetikleniyor
+                viewModelScope.launch {
+                    _effect.send(HomeEffect.NavigateToDetails(intent.itemId))
+                }
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             }
             HomeIntent.TogglePlayPause -> _uiState.update { it.copy(isPlaying = !it.isPlaying) }
             HomeIntent.ToggleFavorite -> {
@@ -61,6 +80,10 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     if (isCurrentlyFav) {
                         FavoritesStorage.savedSongsList.removeAll { it.id == trackId }
                     } else {
+<<<<<<< HEAD
+=======
+                        // Tasarım aşaması için şarkıların ID'lerine göre saniye içeren gerçekçi süreler atıyoruz
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                         val trackDuration = when (trackId) {
                             "1" -> "3:34"
                             "2" -> "4:07"
@@ -104,6 +127,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun loadMockContent() {
+<<<<<<< HEAD
         // Kayıtlı kullanıcı kontrolü yapılarak ad soyad ve baş harfler dinamik atanıyor
         val user = UserStorage.registeredUser
         val dynamicName = if (user != null) "${user.firstName} ${user.lastName}" else "Misafir Kullanıcı"
@@ -116,6 +140,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             HomeUiState(
                 userName = dynamicName,
                 userAvatarText = dynamicAvatarText,
+=======
+        _uiState.update {
+            HomeUiState(
+                userName = "Nazlı Yazıcı",
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 quickPicks = listOf(
                     PlayableItem("1", "Gece Sürüşü", "Sakin Ritmler", gradientIndex = 0),
                     PlayableItem("2", "Sabah Kahvesi", "Akustik", gradientIndex = 1),

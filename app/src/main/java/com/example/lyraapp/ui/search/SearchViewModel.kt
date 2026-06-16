@@ -15,7 +15,11 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SearchViewModel @Inject constructor() : ViewModel() {
+<<<<<<< HEAD
     private val _state = MutableStateFlow(SearchContract.State())
+=======
+    private val _state = MutableStateFlow<SearchContract.State>(SearchContract.State())
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
     val state: StateFlow<SearchContract.State> = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<SearchContract.SideEffect>()

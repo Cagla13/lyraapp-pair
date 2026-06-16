@@ -19,8 +19,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+<<<<<<< HEAD
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -49,7 +52,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+<<<<<<< HEAD
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+=======
+import androidx.hilt.navigation.compose.hiltViewModel
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lyraapp.ui.icons.LyraIcons
 import com.example.lyraapp.ui.theme.LyraAppTheme
@@ -134,6 +141,7 @@ fun RegisterScreen(
             )
             Spacer(Modifier.height(14.dp))
 
+<<<<<<< HEAD
             // Yeni eklenen alan: E-posta Giriş Alanı
             EmailField(
                 value = state.email,
@@ -141,6 +149,8 @@ fun RegisterScreen(
             )
             Spacer(Modifier.height(14.dp))
 
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
             PhoneNumberField(
                 value = state.phoneNumber,
                 onValueChange = { onIntent(RegisterIntent.PhoneNumberChanged(it)) },
@@ -218,8 +228,13 @@ private fun HeaderTexts() {
 private fun NameFields(
     firstName: String,
     lastName: String,
+<<<<<<< HEAD
     onFirstNameChange: (String) -> Unit, // Sözdizimi hatası düzeltildi (= yerine :)
     onLastNameChange: (String) -> Unit,   // Sözdizimi hatası düzeltildi (= yerine :)
+=======
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -247,6 +262,7 @@ private fun NameFields(
 }
 
 @Composable
+<<<<<<< HEAD
 private fun EmailField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -270,6 +286,8 @@ private fun EmailField(
 }
 
 @Composable
+=======
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
 private fun PhoneNumberField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -461,9 +479,14 @@ private fun RegisterScreenDarkPreview() {
     LyraAppTheme(darkTheme = true) {
         RegisterScreen(
             state = RegisterUiState(
+<<<<<<< HEAD
                 firstName = "Nazlı",
                 lastName = "Yazıcı",
                 email = "nazli@mail.com",
+=======
+                firstName = "Halit",
+                lastName = "Kalaycı",
+>>>>>>> fd59ceb7577583470f744260c5ed7ce5ccb4bede
                 phoneNumber = "555 123 45 67",
                 password = "lyra1234",
                 isTermsAccepted = true,
