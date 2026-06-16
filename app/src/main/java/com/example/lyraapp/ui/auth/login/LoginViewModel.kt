@@ -3,6 +3,7 @@ package com.example.lyraapp.ui.auth.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lyraapp.data.AuthRepository
+import com.example.lyraapp.ui.auth.UserStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +34,11 @@ class LoginViewModel @Inject constructor(
 
     fun onIntent(intent: LoginIntent) {
         when (intent) {
-            is LoginIntent.PhoneNumberChanged -> updateForm { it.copy(phoneNumber = intent.value) }
+            is LoginIntent.EmailChanged -> updateForm { it.copy(email = intent.value) }
+            is LoginIntent.PhoneNumberChanged -> {
+                val filteredPhone = intent.value.filter { it.isDigit() }.take(10)
+                updateForm { it.copy(phoneNumber = filteredPhone) }
+            }
             is LoginIntent.PasswordChanged -> updateForm { it.copy(password = intent.value) }
             is LoginIntent.TogglePasswordVisibility -> _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
             is LoginIntent.Submit -> submit()
@@ -53,6 +58,27 @@ class LoginViewModel @Inject constructor(
         val state = _uiState.value
         if (!state.isLoginEnabled || state.isLoading) return
 
+        // Sistemde kayıtlı bir kullanıcı var mı kontrolü
+        val registeredUser = UserStorage.registeredUser
+        if (registeredUser == null) {
+            viewModelScope.launch {
+                _effect.send(LoginEffect.ShowError("Sistemde kayıtlı kullanıcı bulunamadı! Lütfen önce kayıt olun."))
+            }
+            return
+        }
+
+        // Bilgilerin kayıtlı kullanıcı verileriyle eşleşme kontrolü
+        val isEmailMatch = registeredUser.email.equals(state.email, ignoreCase = true)
+        val isPhoneMatch = registeredUser.phoneNumber == state.phoneNumber
+        val isPasswordMatch = registeredUser.password == state.password
+
+        if (!isEmailMatch || !isPhoneMatch || !isPasswordMatch) {
+            viewModelScope.launch {
+                _effect.send(LoginEffect.ShowError("Giriş bilgileri hatalı. Lütfen tekrar deneyin."))
+            }
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val result = authRepository.login(state.phoneNumber, state.password)
@@ -67,6 +93,6 @@ class LoginViewModel @Inject constructor(
     }
 }
 
-/** Giriş butonunun aktif olması için minimal validasyon. */
+/** Giriş butonunun aktif olması için form validasyonu. */
 private fun LoginUiState.isFormValid(): Boolean =
-    phoneNumber.isNotBlank() && password.isNotBlank()
+    email.isNotBlank() && phoneNumber.length == 10 && password.isNotBlank()

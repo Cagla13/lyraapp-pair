@@ -3,6 +3,7 @@ package com.example.lyraapp.ui.auth.register
 data class RegisterUiState(
     val firstName: String = "",
     val lastName: String = "",
+    val email: String = "", // Yeni eklenen alan
     val phoneNumber: String = "",
     val password: String = "",
     val isPasswordVisible: Boolean = false,
@@ -24,6 +25,7 @@ data class RegisterUiState(
 sealed interface RegisterIntent {
     data class FirstNameChanged(val value: String) : RegisterIntent
     data class LastNameChanged(val value: String) : RegisterIntent
+    data class EmailChanged(val value: String) : RegisterIntent // Yeni eklenen niyet
     data class PhoneNumberChanged(val value: String) : RegisterIntent
     data class PasswordChanged(val value: String) : RegisterIntent
     data class TermsAcceptedChanged(val value: Boolean) : RegisterIntent

@@ -2,6 +2,7 @@ package com.example.lyraapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lyraapp.ui.auth.UserStorage
 import com.example.lyraapp.ui.favorites.FavoritesStorage
 import com.example.lyraapp.ui.favorites.SongUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,12 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 }
             }
             is HomeIntent.TrackClicked -> {
+                // Navigasyon efekti tetikleniyor
+                viewModelScope.launch {
+                    _effect.send(HomeEffect.NavigateToDetails(intent.itemId))
+                }
+
+                // Oynatılan şarkı durum güncellemesi
                 _uiState.update { current ->
                     val selected = current.recentlyPlayed.find { it.id == intent.itemId }
                         ?: current.customPlaylists.find { it.id == intent.itemId }
@@ -54,7 +61,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     if (isCurrentlyFav) {
                         FavoritesStorage.savedSongsList.removeAll { it.id == trackId }
                     } else {
-                        // Tasarım aşaması için şarkıların ID'lerine göre saniye içeren gerçekçi süreler atıyoruz
                         val trackDuration = when (trackId) {
                             "1" -> "3:34"
                             "2" -> "4:07"
@@ -86,11 +92,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             HomeIntent.SeeAllRecentlyPlayedClicked -> {
                 // İhtiyaca göre doldurulabilir
             }
-            is HomeIntent.TrackClicked -> {
-                viewModelScope.launch {
-                    _effect.send(HomeEffect.NavigateToDetails(intent.itemId))
-                }
-            }
         }
     }
 
@@ -103,9 +104,18 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun loadMockContent() {
+        // Kayıtlı kullanıcı kontrolü yapılarak ad soyad ve baş harfler dinamik atanıyor
+        val user = UserStorage.registeredUser
+        val dynamicName = if (user != null) "${user.firstName} ${user.lastName}" else "Misafir Kullanıcı"
+
+        val firstInitial = user?.firstName?.firstOrNull()?.uppercase() ?: ""
+        val lastInitial = user?.lastName?.firstOrNull()?.uppercase() ?: ""
+        val dynamicAvatarText = if (user != null) "$firstInitial$lastInitial" else "MK"
+
         _uiState.update {
             HomeUiState(
-                userName = "Nazlı Yazıcı",
+                userName = dynamicName,
+                userAvatarText = dynamicAvatarText,
                 quickPicks = listOf(
                     PlayableItem("1", "Gece Sürüşü", "Sakin Ritmler", gradientIndex = 0),
                     PlayableItem("2", "Sabah Kahvesi", "Akustik", gradientIndex = 1),

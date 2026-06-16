@@ -24,11 +24,13 @@ class FakeAuthRepository @Inject constructor() : AuthRepository {
     override suspend fun register(
         firstName: String,
         lastName: String,
+        email: String,
         phoneNumber: String,
         password: String,
     ): Result<Unit> {
         delay(NETWORK_DELAY_MS)
-        return if (firstName.isNotBlank() && lastName.isNotBlank() && password.isNotBlank()) {
+
+        return if (firstName.isNotBlank() && lastName.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
             Result.success(Unit)
         } else {
             Result.failure(IllegalArgumentException("Hesap bilgileri eksik."))

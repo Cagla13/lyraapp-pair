@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -93,10 +94,11 @@ fun HomeScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            // 1. Üst Başlık ve Profil Alanı
+            // 1. Üst Başlık ve Profil Alanı (Dinamik State Bağlandı)
             item {
                 HomeHeader(
                     userName = state.userName,
+                    avatarText = state.userAvatarText,
                     onProfileClick = { onIntent(HomeIntent.ProfileClicked) }
                 )
             }
@@ -131,7 +133,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeHeader(userName: String, onProfileClick: () -> Unit) {
+private fun HomeHeader(userName: String, avatarText: String, onProfileClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,17 +153,17 @@ private fun HomeHeader(userName: String, onProfileClick: () -> Unit) {
                 fontWeight = FontWeight.Bold
             )
         }
-        // Profil İkonu (Mock Tasarımdaki Pembe ZK gibi yuvarlak alan)
+        // Profil İkonu (Giriş yapan kullanıcının baş harflerini dinamik basar)
         Box(
             modifier = Modifier
                 .size(40.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable(onClick = onProfileClick),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = userName.take(2).uppercase(),
+                text = avatarText,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -249,7 +251,6 @@ private fun HorizontalTrackList(items: List<PlayableItem>, onItemClick: (String)
                     .width(140.dp)
                     .clickable { onItemClick(item.id) }
             ) {
-                // Mock Tasarımdaki Renkli Albüm Kapağı Alanı
                 Box(
                     modifier = Modifier
                         .size(140.dp)

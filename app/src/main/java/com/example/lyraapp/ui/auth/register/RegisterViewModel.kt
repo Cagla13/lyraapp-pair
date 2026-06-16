@@ -3,6 +3,7 @@ package com.example.lyraapp.ui.auth.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lyraapp.data.AuthRepository
+import com.example.lyraapp.ui.auth.UserStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -34,9 +35,21 @@ class RegisterViewModel @Inject constructor(
 
     fun onIntent(intent: RegisterIntent) {
         when (intent) {
-            is RegisterIntent.FirstNameChanged -> updateForm { it.copy(firstName = intent.value) }
-            is RegisterIntent.LastNameChanged -> updateForm { it.copy(lastName = intent.value) }
-            is RegisterIntent.PhoneNumberChanged -> updateForm { it.copy(phoneNumber = intent.value) }
+            is RegisterIntent.FirstNameChanged -> {
+                // Klavyenin kilitlenmemesi ve Türkçe karakterlerin rahat yazılması için
+                // girdiyi filtrelemeden direkt state'e alıyoruz. Validasyon aşağıda regex ile yapılacak.
+                updateForm { it.copy(firstName = intent.value) }
+            }
+            is RegisterIntent.LastNameChanged -> {
+                // Klavyenin kilitlenmemesi ve Türkçe karakterlerin rahat yazılması için direkt alıyoruz
+                updateForm { it.copy(lastName = intent.value) }
+            }
+            is RegisterIntent.EmailChanged -> updateForm { it.copy(email = intent.value) }
+            is RegisterIntent.PhoneNumberChanged -> {
+                // Telefon numarası sadece rakamlardan oluşmalı (En fazla 10 hane: 5XXXXXXXXX)
+                val filteredPhone = intent.value.filter { it.isDigit() }.take(10)
+                updateForm { it.copy(phoneNumber = filteredPhone) }
+            }
             is RegisterIntent.PasswordChanged -> updateForm { it.copy(password = intent.value) }
             is RegisterIntent.TermsAcceptedChanged -> updateForm { it.copy(isTermsAccepted = intent.value) }
             is RegisterIntent.TogglePasswordVisibility -> _uiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
@@ -61,18 +74,40 @@ class RegisterViewModel @Inject constructor(
         val state = _uiState.value
         if (!state.isRegisterEnabled || state.isLoading) return
 
+        // İSTEK: Aynı mail adresiyle tekrar kayıt olmaya çalışılırsa butonu kapatmak yerine
+        // tıklamaya izin verip sonradan hata mesajını alt taraftaki Snackbar üzerinden gösteriyoruz.
+        val existingUser = UserStorage.registeredUser
+        if (existingUser != null && existingUser.email.equals(state.email, ignoreCase = true)) {
+            sendEffect(RegisterEffect.ShowError("Bu e-posta adresi ile hesap bulunmakta!"))
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+
+            // Uzak sunucu kayıt çağrısı
             val result = authRepository.register(
                 firstName = state.firstName,
                 lastName = state.lastName,
+                email = state.email,
                 phoneNumber = state.phoneNumber,
                 password = state.password,
             )
+
             _uiState.update { it.copy(isLoading = false) }
 
             result
-                .onSuccess { _effect.send(RegisterEffect.NavigateToHome) }
+                .onSuccess {
+                    // Kayıt başarılı olduğunda kullanıcı verilerini yerel hafızaya yazıyoruz
+                    UserStorage.registeredUser = UserStorage.UserData(
+                        firstName = state.firstName,
+                        lastName = state.lastName,
+                        email = state.email,
+                        phoneNumber = state.phoneNumber,
+                        password = state.password
+                    )
+                    _effect.send(RegisterEffect.NavigateToLogin) // Kayıttan sonra login'e yönlendiriyoruz
+                }
                 .onFailure { error ->
                     _effect.send(RegisterEffect.ShowError(error.message ?: "Kayıt başarısız."))
                 }
@@ -85,20 +120,28 @@ class RegisterViewModel @Inject constructor(
 }
 
 /** Kayıt butonunun aktif olması için validasyon (ekran kuralı: en az 8 karakter, bir rakam). */
-private fun RegisterUiState.isFormValid(): Boolean =
-    firstName.isNotBlank() &&
-            lastName.isNotBlank() &&
+private fun RegisterUiState.isFormValid(): Boolean {
+    // Türkçe karakterleri (büyük/küçük), İngilizce harfleri ve boşlukları kabul eden validasyon Regex'i
+    val namePattern = Regex("^[a-zA-ZçÇğĞıİöÖşŞüÜ\\s]+$")
+
+    val isFirstNameValid = firstName.isNotBlank() && firstName.matches(namePattern)
+    val isLastNameValid = lastName.isNotBlank() && lastName.matches(namePattern)
+
+
+    return isFirstNameValid &&
+            isLastNameValid &&
+            email.isNotBlank() &&
             phoneNumber.isNotBlank() &&
             password.isPasswordPolicyValid() &&
             isTermsAccepted
+}
 
 /** Şifre politikası: en az 8 karakter ve en az bir rakam. */
 private fun String.isPasswordPolicyValid(): Boolean =
     length >= MIN_PASSWORD_LENGTH && any(Char::isDigit)
 
 /**
- * Şifre gücünü 0..[RegisterUiState.PASSWORD_STRENGTH_MAX] aralığında türetir:
- * uzunluk, rakam ve harf ölçütlerinden her biri bir segment doldurur.
+ * Şifre gücünü 0..[RegisterUiState.PASSWORD_STRENGTH_MAX] aralığında türetir.
  */
 private fun String.passwordStrength(): Int {
     if (isEmpty()) return 0

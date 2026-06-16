@@ -7,14 +7,10 @@ plugins {
 
 android {
     namespace = "com.example.lyraapp"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.turkcell.lyraapp"
+        applicationId = "com.example.lyraapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -56,6 +52,7 @@ dependencies {
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.media3.common.ktx)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

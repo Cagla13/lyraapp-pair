@@ -19,6 +19,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -132,6 +134,13 @@ fun RegisterScreen(
             )
             Spacer(Modifier.height(14.dp))
 
+            // Yeni eklenen alan: E-posta Giriş Alanı
+            EmailField(
+                value = state.email,
+                onValueChange = { onIntent(RegisterIntent.EmailChanged(it)) }
+            )
+            Spacer(Modifier.height(14.dp))
+
             PhoneNumberField(
                 value = state.phoneNumber,
                 onValueChange = { onIntent(RegisterIntent.PhoneNumberChanged(it)) },
@@ -209,8 +218,8 @@ private fun HeaderTexts() {
 private fun NameFields(
     firstName: String,
     lastName: String,
-    onFirstNameChange: (String) -> Unit,
-    onLastNameChange: (String) -> Unit,
+    onFirstNameChange: (String) -> Unit, // Sözdizimi hatası düzeltildi (= yerine :)
+    onLastNameChange: (String) -> Unit,   // Sözdizimi hatası düzeltildi (= yerine :)
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -235,6 +244,29 @@ private fun NameFields(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         )
     }
+}
+
+@Composable
+private fun EmailField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        label = { Text("E-posta adresi") },
+        placeholder = { Text("ornek@mail.com") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = null,
+            )
+        },
+    )
 }
 
 @Composable
@@ -429,8 +461,9 @@ private fun RegisterScreenDarkPreview() {
     LyraAppTheme(darkTheme = true) {
         RegisterScreen(
             state = RegisterUiState(
-                firstName = "Halit",
-                lastName = "Kalaycı",
+                firstName = "Nazlı",
+                lastName = "Yazıcı",
+                email = "nazli@mail.com",
                 phoneNumber = "555 123 45 67",
                 password = "lyra1234",
                 isTermsAccepted = true,

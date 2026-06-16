@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -28,6 +30,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,8 +47,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.lyraapp.ui.icons.LyraIcons
 import com.example.lyraapp.ui.theme.LyraAppTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 
 /**
  * Login akışının durumlu (stateful) giriş noktası.
@@ -106,13 +108,19 @@ fun LoginScreen(
                 .imePadding()
                 .padding(horizontal = 24.dp),
         ) {
-            Spacer(Modifier.weight(0.22f))
+            Spacer(Modifier.weight(0.15f))
 
             BrandLogo()
             Spacer(Modifier.height(24.dp))
 
             HeaderTexts()
             Spacer(Modifier.height(28.dp))
+
+            EmailField(
+                value = state.email,
+                onValueChange = { onIntent(LoginIntent.EmailChanged(it)) }
+            )
+            Spacer(Modifier.height(14.dp))
 
             PhoneNumberField(
                 value = state.phoneNumber,
@@ -189,6 +197,29 @@ private fun HeaderTexts() {
 }
 
 @Composable
+private fun EmailField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        label = { Text("E-posta adresi") },
+        placeholder = { Text("ornek@mail.com") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = null,
+            )
+        },
+    )
+}
+
+@Composable
 private fun PhoneNumberField(
     value: String,
     onValueChange: (String) -> Unit,
@@ -200,7 +231,7 @@ private fun PhoneNumberField(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         label = { Text("Telefon numarası") },
-        prefix = { Text("+90") },
+        prefix = { Text("+90 ") },
         placeholder = { Text("5XX XXX XX XX") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         leadingIcon = {
@@ -320,7 +351,7 @@ private fun LoginScreenLightPreview() {
 private fun LoginScreenDarkPreview() {
     LyraAppTheme(darkTheme = true) {
         LoginScreen(
-            state = LoginUiState(phoneNumber = "555 123 45 67", password = "secret", isLoginEnabled = true),
+            state = LoginUiState(email = "test@mail.com", phoneNumber = "5551234567", password = "secret", isLoginEnabled = true),
             onIntent = {},
         )
     }
